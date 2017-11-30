@@ -4,9 +4,9 @@ Authors: ADVANSE team at LIRMM
 
 ## Introduction
 
-We present a new [Streamgraph-based](http://leebyron.com/streamgraph/ "Streamgraph-based") approach to convey the hierarchical structure of multiple time series to facilitate the exploration and comparisons of temporal evolution. Based on a focus+context technique, our method allows time series exploration at different granularities (e. g., from overview to details.
+We present a new [Streamgraph-based](http://leebyron.com/streamgraph/ "Streamgraph-based") approach to convey the hierarchical structure of multiple time series to facilitate the exploration and comparisons of temporal evolution. Based on a focus+context technique, our method allows time series exploration at different granularities (e. g., from overview to details).
 
-![MultiStream](https://github.com/erickedu85/multistream/blob/master/img/multistream_gif.gif)
+![MultiStream](https://github.com/erickedu85/multistream/blob/master/img/multistream_gif.gif "MultiStream")
 
 ## Datasets available
 * Sentiment analysis of political events:
