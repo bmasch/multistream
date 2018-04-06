@@ -3,8 +3,7 @@
 <head>
 <title>MultiStream</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-<link rel="shortcut icon" type="image/png" href="img/favicon.png" />
+<link rel="shortcut icon" type="image/png" href="img/multistream.png" />
 
 <!-- CSS -->
 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"></link>
@@ -44,15 +43,15 @@
 			<br>
 		</div>
 		<div class="row">
-			<div class="col-sm-4">
+			<div class="col-sm-5">
 				<h3>Abstract</h3>
 				<p align="justify">
 					Multiple time series are a set of multiple quantitative variables
 					occurring at the same interval. They are present in many domains
 					such as medicine, finance, and manufacturing for analytical
-					purposes. In recent years, <strong> <a
+					purposes. In recent years, <i> <a
 						href="http://leebyron.com/streamgraph/" target="_blank">
-							Streamgraph</a></strong> visualization (evolved from ThemeRiver)
+							Streamgraph</a></i> visualization (evolved from ThemeRiver)
 					has been widely used for representing temporal evolution patterns
 					in multiple time series. However, Streamgraph as well as ThemeRiver
 					suffer from scalability problems when dealing with several time
@@ -63,8 +62,29 @@
 					the hierarchical structure of multiple time series to facilitate
 					the exploration and comparisons of temporal evolution. Based on a
 					focus+context technique, our method allows time series exploration
-					at different granularities (e. g., from overview to details)
+					at different granularities (<i>e.g.</i> from overview to details).
 				</p>
+				<p>
+					<a
+						href="https://www.lirmm.fr/~cuenca/publications/tvcg/cuenca_et_al_2018.pdf"
+						target="_blank">PDF</a> | <a href="https://youtu.be/T-Nrwif7dss"
+						target="_blank">Video</a>
+				</p>
+				<p align="justify" style="font-size: 12px;">E. Cuenca, A.
+					Sallaberry, F. Y. Wang, and P. Poncelet. MultiStream: A
+					Multiresolution Streamgraph Approach to Explore Hierarchical Time
+					Series. <i>IEEE Transactions on Visualization and Computer Graphics</i>,
+					PP, 2018. To appear.</p>
+				<br>
+				<p>
+					Contact: <a href="mailto:erick.cuenca@lirmm.fr">erick.cuenca@lirmm.fr</a>
+					<a href="https://github.com/erickedu85/" target="_blank"> <span
+						class="fa-stack fa-lg"> <i class="fa fa-circle fa-stack-2x"></i> <i
+							class="fa fa-github fa-stack-1x fa-inverse"></i>
+					</span>
+					</a>
+				</p>
+
 			</div>
 			<div class="col-sm-4">
 				<h3>Datasets available</h3>
@@ -89,7 +109,8 @@
 				</ul>
 			</div>
 
-			<div class="col-sm-4">
+			<div class="col-sm-3">
+
 				<form action="visualize.php" method="post"
 					enctype="multipart/form-data">
 					<h3>Visualize an example</h3>
@@ -111,12 +132,14 @@
 						</select>
 					</div>
 					<br>
-					<!-- 
-					<p>Select json file:</p>
+
+					<!-- 				
+					<h3>Upload your data (json file)</h3>
 					<p>
 						<input type="file" name="fileToUpload" id="fileToUpload">
 					</p>
 					 -->
+
 					<p>
 						<input type="submit" value="Visualize" name="submit">
 					</p>

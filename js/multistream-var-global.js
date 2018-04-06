@@ -75,8 +75,12 @@ function addingKey(d,index){
 
 $(document).ready(function() {
 	dataset = jsonArray.data.map(function(d, i) {
+//		console.log(d.text); 
 		return {"date":parseDate(d.date_time), "value": d.value, "text":d.text };
+//		return {"date":parseDate(d.date_time), "value": d.value };
 	});
+	
+//	console.log("finish parse date")
 	
 	dataset_nested = nest_by_name.entries(dataset);
 	//sort the dataset_nested by Date
@@ -92,6 +96,9 @@ $(document).ready(function() {
 				});
 	})
 	
+//	console.log("finish nested function")
+//	console.log(dataset_nested);
+	
 	data_type = jsonArray.type;
 	
 	//tree.nodes add: children, depth, name, x, y
@@ -104,13 +111,13 @@ $(document).ready(function() {
 //	hierarchy[0].key = root_key;
 //	hierarchy[0].color = root_color;
 //	hierarchy[0].children.forEach(addingKey);//reverse() start from root to down
-	
-	
 	//hierarchy[0].children.forEach(addingKey);//As [0] contains all structure
 
 	//Loading VIS
 	loadMultiresolutionVis();
+//	console.log("finish load multiresolution view")
 	loadTreeVis();
+//	console.log("finish loadtree view")
 	
 	//
 	document.getElementById("loader").style.display = "none";

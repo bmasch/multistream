@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<link rel="shortcut icon" type="image/png" href="img/favicon.png" />
+<link rel="shortcut icon" type="image/png" href="img/multistream.png" />
 <link rel="stylesheet" type="text/css"
 	href="fonts/font-awesome-4.2.0/css/font-awesome.min.css">
 <link rel="stylesheet" type="text/css"
@@ -47,7 +47,7 @@
 					$nTimeGranularity = 1; // interval by nGranularity minimum 1 max 5
 					$getText = TRUE; // to get the text of the values
 					$description = "<strong>About: </strong>Tweets collected<br><strong>Period: </strong><br><strong>Tweets: </strong>  <br><strong>Hashtag: </strong>";
-					break;					
+					break;
 				case 3 :
 					$name = "Sentiment analysis of the 2013 Australian presidential period";
 					$fileName = "2013_Australian_presidential_period";
@@ -74,12 +74,22 @@
 					$nTimeGranularity = 1; // interval by nGranularity minimum 1 max 5
 					$getText = TRUE; // to get the text of the values
 					$description = "<strong>About: </strong>This visualization shows the sentiments expressed in tweets on a rugby union match 2014<br><strong>Period: </strong>November 22th, 2014 17:40-19:10 (UTC+2)<br><strong>Tweets: </strong>2,531 tweets with the hashtag #WAvNZ";
-					break;					
+					break;
+				case 6 :
+					$name = "AIDS";
+					$fileName = "multiStream_sis";
+					$filePath = "source/aids/json/" . $fileName . ".json";
+					$timePolarity = 4; // 0 minutes, 1 hours, 2 days, 3 week, 4 month, 5 years
+					$nTimeGranularity = 1; // interval by nGranularity minimum 1 max 5
+					$getText = TRUE; // to get the text of the values
+					$description = "<strong>About: </strong>";
+					break;
 			}
 			
 			$str = file_get_contents ( $filePath );
 			
-			$json = json_decode ( json_encode ( utf8_encode ( $str ) ) ); // works
+			// $json = json_decode ( json_encode ( utf8_encode ( $str ) ) ); // WORKS
+			$json = json_decode ( json_encode ( $str ) ); // PRUEBA WORKS AUSSI
 			$error = json_last_error ();
 			
 			?>
@@ -93,6 +103,19 @@
 
 </head>
 <body class="cm-no-transition cm-1-navbar">
+
+	<div id="fb-root"></div>
+	<script>(function(d, s, id) {
+			  var js, fjs = d.getElementsByTagName(s)[0];
+			  if (d.getElementById(id)) return;
+			  js = d.createElement(s); js.id = id;
+			  js.src = "//connect.facebook.net/en_EN/sdk.js#xfbml=1&version=v2.8";
+			  fjs.parentNode.insertBefore(js, fjs);
+			}(document, 'script', 'facebook-jssdk'));
+	</script>
+
+	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
 	<div id="loader"></div>
 	<div id="cm-menu">
 		<nav class="cm-navbar cm-navbar-primary">
@@ -105,22 +128,37 @@
 			<svg id="tree-vis"></svg>
 		</div>
 	</div>
-	<header id="cm-header" style="display: none;">
+	<header id="cm-header" style="display: inline;">
 		<nav class="cm-navbar cm-navbar-primary">
 			<div class="btn btn-primary md-menu-white hidden-md hidden-lg"
 				data-toggle="cm-menu"></div>
 			<div class="cm-flex">
 				<h1 style="display: inline;"><?php echo($name)?></h1>
-				<i id="panelInfo" class="fa fa-info-circle fa-lg" data-toggle="modal" data-target="#infoModal"></i>
+				<i id="panelInfo" class="fa fa-info-circle fa-lg"
+					data-toggle="modal" data-target="#infoModal"></i>
+			</div>
+			<div class="pull-right" style="padding: 15px 15px 0px 15px; width: 75px;">
+				<a  class="twitter-share-button" href="https://twitter.com/share"
+					data-size="small" data-text="MultiStream (a time series visualization)"
+					data-url="https://goo.gl/LjSjMK"
+					data-hashtags="timeseries,visualization,d3js" data-via=""
+					data-related="timeseries,visualization,hierarchical,d3js"> Tweet </a>
+			</div>
+			<div class="pull-right" style="padding: 15px 15px 0px 15px; width: 75px;">
+				<a  class="fb-share-button"
+					data-href="https://goo.gl/LjSjMK"
+					data-layout="button" data-size="small"></a>
 			</div>
 			<div class="pull-right">
-				<button id="svg-export" class="btn btn-primary md-download-svg-white"></button>
+				<button id="svg-export"
+					class="btn btn-primary md-download-svg-white"></button>
 			</div>
 		</nav>
 	</header>
 	<div id="global" style="display: none;">
 		<!-- style="overflow-y:hidden; -->
-		<div class="container-fluid cm-container-white" style="overflow:hidden; margin-bottom:10px; padding-top: 10px; padding-bottom: 10px;">
+		<div class="container-fluid cm-container-white"
+			style="overflow: hidden; margin-bottom: 10px; padding-top: 10px; padding-bottom: 10px;">
 			<svg id="multiresolution-vis"></svg>
 		</div>
 		<footer class="cm-footer" style="display: none;"> </footer>
@@ -159,22 +197,22 @@
 				</div>
 				<div class="col-md-5">
 					<div id="col-checked">
-						<label class="checkbox-inline" style="display: none;"><input id="animation"
-							type="checkbox" value="" checked>Animation</label>
+						<label class="checkbox-inline" style="display: none;"><input
+							id="animation" type="checkbox" value="" checked>Animation</label>
 						<label class="checkbox-inline"><input id="outline-layers"
-							type="checkbox" value="">Outline layers</label>	
-						<label class="checkbox-inline"><input id="limit-ranges"
-							type="checkbox" value="">Border areas</label>	
-						<label class="checkbox-inline"><input id="fading-colors"
-							type="checkbox" value="">Highlight detailed-area</label>
+							type="checkbox" value="">Outline layers</label> <label
+							class="checkbox-inline"><input id="limit-ranges" type="checkbox"
+							value="">Border areas</label> <label class="checkbox-inline"><input
+							id="fading-colors" type="checkbox" value="">Highlight
+							detailed-area</label>
 					</div>
 				</div>
-<!-- 				<div class="col-md-2"> -->
-<!-- 					<div id="col-checked"> -->
-<!-- 						<label class="checkbox"><input id="fading-colors" -->
-<!-- 							type="checkbox" value="">Fading colors</label> -->
-<!-- 					</div> -->
-<!-- 				</div> -->
+				<!-- 				<div class="col-md-2"> -->
+				<!-- 					<div id="col-checked"> -->
+				<!-- 						<label class="checkbox"><input id="fading-colors" -->
+				<!-- 							type="checkbox" value="">Fading colors</label> -->
+				<!-- 					</div> -->
+				<!-- 				</div> -->
 			</div>
 		</nav>
 

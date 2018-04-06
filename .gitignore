@@ -1,6 +1,7 @@
 .settings
 .buildpath
 .project
+icon.svg
 source/2013_australian_presidential_period/bruto
 source/2013_australian_presidential_period/csv
 source/2013_australian_presidential_period/xlsx
@@ -21,3 +22,4 @@ source/2016_us_presidential_election_day/csv
 source/2016_us_presidential_election_day/xlsx
 source/2017_ecuador_presidential_election_day
 source/structure-json.txt
+source/structure-multistream.json

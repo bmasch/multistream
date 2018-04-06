@@ -120,14 +120,22 @@ input[type=number] {
 	padding: 1px 1px 1px 1px;
 } */
 
-.fb-share-button {
+/* .fb-share-button {
 	margin: 5px 0;
 }
 
-.twitter-share-button {
+.twitter-share-buttonD {
 	margin: 20px 0;
 }
 
+ */
+ 
+ #kkk{
+    width: 300px;
+    margin: auto;
+    border: 1px solid red;
+}
+ 
 .navbar {
 	height: 25px;
 	margin-top: -15px;

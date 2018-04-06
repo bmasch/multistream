@@ -11,9 +11,9 @@ var opts = {
 	outlineLayersColor: "#585858", //if outlineLayer(up) true Black grey
 	//
 	//Initial time steps
-	factBrushContext : 4, // time-step
-	factBrushFisheye : 3, // time-step
-	factBrushNormal : 5, // time-step
+	factBrushContext : 4, // 4 time-step
+	factBrushFisheye : 3, // 3 time-step
+	factBrushNormal : 5, // time-step NOT USED
 	//
 	constanteL : 0, //constant for Left distortion
 	constanteR: 0, //constant for right distortion
@@ -774,6 +774,9 @@ var children_bottom_list = [];
 function display() {
 	dateExtRange = d3.extent(dataset, function(d) {return d.date;}); // max and min date
 	
+//	console.log("timePolarity" + timePolarity)
+//	console.log("nTimeGranularity" + nTimeGranularity)
+	
 	//DATES Ranges
 	switch (timePolarity) {
 		case 0: 
@@ -808,6 +811,10 @@ function display() {
 			break;
 	}
 
+//	console.log("dateMinRange: " + dateMinRange)
+//	console.log("dateMaxRange: " + dateMaxRange)
+//	console.log("dateRange: " + dateRange)
+	
 	/* HIJOS AND PADRES  */
 	// preProcessing is a function to divide a data by range de time and range of R0, R1, R3, R4
 	leaf_level = preProcessing();
@@ -869,6 +876,7 @@ function display() {
 	yScaleFocus.domain([ 0, d3.max(nivel_bajo, function(d) {return d.y0 + d.y;}) ]);
 	yScaleContext.domain(yScaleFocus.domain());
 	
+//	console.log("comienza a crear")
 	focus.append("g")
 			.attr("class", "y axis focus")
 			.attr("transform","translate(0,0)")
@@ -925,6 +933,21 @@ function display() {
 			.call(xAxisContext);
 
 	createBrushInContext();
+//	console.log("finish brush In Context")
+	
+	
+//	console.log(brushContextNorLeft.extent());
+//	console.log(brushContextDisLeft.extent());
+//	console.log(brushContext.extent());
+//	console.log(brushContextDisRight.extent());
+//	console.log(brushContextNorRight.extent());
+	
+	
+
+
+
+
+	
 	
 	//TEST Combined paths - work mais il n'y a pas les couleurs
 	//	var combinedD = "";
@@ -941,7 +964,12 @@ function display() {
 	
 	//To get the hierarchy for each scale in focus
 	rangesDomainFocus = (nest_by_key.entries(calculateRangeFocus(opts.facteurNor, opts.facteurDis, opts.facteurZoom)));
-
+//	console.log("finish rangesDomainFocus")
+//	console.log(rangesDomainFocus[0]);
+//	console.log(rangesDomainFocus[1]);
+//	console.log(rangesDomainFocus[2]);
+//	console.log(rangesDomainFocus[3]);
+//	console.log(rangesDomainFocus[4]);
 	// To create a new rangesDomainFocus with the result of calling a functionon every element depending
 	// If it is NL, FL, Z, FR, NR.
 	rangesDomainFocus.map(function(element) {
@@ -962,10 +990,10 @@ function display() {
 			element.values.map(function(element) {element.domain = brushContextNorRight.extent();})
 		}
 	})
-	
+//	console.log("finish map")
 	focus.append("g").attr("id","x_grid_focus");
 	createScalesAxisFocus();
-	
+//	console.log("finish createScalesAxisFocus")
 	focus.append("g").attr("id","x_axis_focus");
 	
 	//FOCUS : Append Axis
@@ -977,7 +1005,7 @@ function display() {
 	}
 	
 	createGradientArrays(key_bottom_list);
-	
+//	console.log("finish createGradientArrays")
 	//FOCUS
 	focus.append("g").attr("id","flowsInFocus");
 	
@@ -1034,11 +1062,11 @@ function display() {
 	
 	focus.append("g").attr("id","linksProjetions")
 	updateRectanglesAndLinksInFocus();// Rectangles BORDERS
-	
+//	console.log("finish updateRectanglesAndLinksInFocus")
 	focus.append("g").attr("id","textsLabels");
 	var dAnimation = opts.animation ? opts.durationTransitionAnimation:opts.durationTransitionMoveFlow;
 	createTextLabel(dAnimation);
-	
+//	console.log("finish createTextLabel")
 	/* ToolTip */
 	tooltip = d3.select("body").append("div")
 							.attr("id", "tooltip-flow");
@@ -1049,7 +1077,7 @@ function display() {
 	createStylesBrushes();
 	
 	beginValidation();//To set the values at begging
-	
+//	console.log("finish")
 }
 
 function getTextLabels(){
@@ -1516,8 +1544,28 @@ function createTooltip(){
 						var dateSelected = (d.values[mouseDateIndex].date); //FECHA
 						textsArraySelected = (d.values[mouseDateIndex].text); //ARRAY
 						var formatDate;
-						//timePolarity == 5 For years
-						timePolarity == 5 ? formatDate= d3.time.format("") : formatDate= d3.time.format("%d %b %Y");
+//						timePolarity == 5 ? formatDate= d3.time.format("") : formatDate= d3.time.format("%d %b %Y");						
+						switch(timePolarity){
+							case 0: // 0 minutes
+								formatDate= d3.time.format("%d %b %Y %H:%M");
+								break;
+							case 1:// 1 hours
+								formatDate= d3.time.format("")
+								break;
+							case 2: // 2 days
+								formatDate= d3.time.format("")
+								break;
+							case 3: //3 week
+								formatDate= d3.time.format("")
+								break;
+							case 4: // 4 month
+								formatDate= d3.time.format("%b %Y");
+								break;
+							case 5: //5 For years
+								formatDate= d3.time.format("%Y")
+								break;
+						}
+
 						
 						//points for vertical tooltip
 						var x1 = scalesFocus[selectAxisFocus(dateSelected)](dateSelected);  
@@ -1538,7 +1586,8 @@ function createTooltip(){
 							.duration(opts.tooltipTransitionMouseMove)
 								.style("opacity",1)
 									var first_line = "<p class='title'>" + d.name + "</p>";
-									var second_line = "<p class='info'> At " + formatDate(dateSelected) + " " + customTimeFormat(dateSelected) + ", " + "<strong>" + valueSelected +" "+  data_type + "</strong></p>";
+//									var second_line = "<p class='info'> At " + formatDate(dateSelected) + " " + customTimeFormat(dateSelected) + ", " + "<strong>" + valueSelected +" "+  data_type + "</strong></p>";
+									var second_line = "<p class='info'> At " + formatDate(dateSelected) + ", " + "<strong>" + valueSelected +" "+  data_type + "</strong></p>";
 									var thrid_line = "";
 									
 									if(textsArraySelected.length!=0){
@@ -1837,6 +1886,10 @@ function createScalesAxisFocus() {
 	//xAxisFocus
 	for (var i = 0; i < rangesDomainFocus.length; i++) {
 		for (var j = 0; j < rangesDomainFocus[i].values.length; j++) {
+			
+//			console.log([rangesDomainFocus[i].values[j].range[0],rangesDomainFocus[i].values[j].range[1]])
+//			console.log(rangesDomainFocus[i].values[j].domain)
+			
 			scalesFocus[scalesFocus.length] = d3.time.scale()
 					.clamp(true) // 
 					.range([rangesDomainFocus[i].values[j].range[0],rangesDomainFocus[i].values[j].range[1]])
@@ -1852,6 +1905,8 @@ function createScalesAxisFocus() {
 			
 			/* Grid Division Chaque interval of time */
 			var axisGridDivision;
+//			console.log(timePolarity)
+//			console.log(nTimeGranularity)
 			switch (timePolarity) { 
 				case 0:
 					axisGridDivision = d3.svg.axis()
@@ -1904,7 +1959,7 @@ function createScalesAxisFocus() {
 			}
 			
 			
-			
+//			console.log("A")
 			focus.select("#x_grid_focus").append("g")
 									.attr("class", "x grid area" +i+" "+j)
 									.attr("transform", "translate(" +0 + ","+ heightFocus + ")")
@@ -1912,7 +1967,7 @@ function createScalesAxisFocus() {
 //							 .selectAll(".tick")//V4 d3.js ??
 //							 	 .classed("minor", function(d) { return d.getMinutes(); })
 							 	 ;
-			
+//			console.log("B")
 			//Default 1 minute or 1 hour or 1...
 			//TEXT TICKS
 			//i=1 and i=3 distortion.
@@ -3610,6 +3665,7 @@ function preProcessing() {
 					"value":num_value,
 					"text":text
 				})
+				//console.log(results);
 			}
 		}
 	})
@@ -4127,10 +4183,12 @@ function createBrushInContext(){
 	extentBrushContext = [dateRange[(indexDateAveRange - opts.factBrushContext/2)],dateRange[(indexDateAveRange + opts.factBrushContext/2)]];
 	
 	//Colors bars position in scale
-	var barNorLeft = dateMinRange; //dateRange[(indexDateAveRange - opts.factBrushContext/2 - opts.factBrushFisheye - opts.factBrushNormal-10)];
+//	var barNorLeft = dateRange[(indexDateAveRange - opts.factBrushContext/2 - opts.factBrushFisheye - opts.factBrushNormal-10)];
+	var barNorLeft = dateMinRange; 
 	var barDisLeft = dateRange[(indexDateAveRange - opts.factBrushContext/2 - opts.factBrushFisheye)];
 	var barDisRight = dateRange[(indexDateAveRange + opts.factBrushContext/2 + opts.factBrushFisheye)];
-	var barNorRight = dateMaxRange; //dateRange[(indexDateAveRange + opts.factBrushContext/2 + opts.factBrushFisheye + opts.factBrushNormal)];
+	var barNorRight = dateMaxRange; 
+//	var barNorRight = dateRange[(indexDateAveRange + opts.factBrushContext/2 + opts.factBrushFisheye + opts.factBrushNormal)];
 
 	brushContext = d3.svg.brush()
 					.x(xScaleContext)
